@@ -14,7 +14,6 @@ class RegistrationController(private val registrationService: RegistrationServic
 
     @PostMapping
     fun register(@Valid @RequestBody userRegistrationForm: UserRegistrationForm): ResponseEntity<User> {
-        println(userRegistrationForm.email)
         return ResponseEntity.ok(this.registrationService.registerNewUser(userRegistrationForm))
     }
 
