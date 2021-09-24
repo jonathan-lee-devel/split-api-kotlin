@@ -9,4 +9,6 @@ interface UserRepository : JpaRepository<User, Long> {
     @Nullable
     fun findByEmail(email: String): User
 
+    fun findByUserId(userId: String): User
+
 }
