@@ -1,5 +1,6 @@
 package io.jonathanlee.splitapi.service.auth.impl
 
+import io.jonathanlee.splitapi.dto.auth.UserDto
 import io.jonathanlee.splitapi.form.auth.UserRegistrationForm
 import io.jonathanlee.splitapi.model.auth.User
 import io.jonathanlee.splitapi.model.auth.VerificationToken
@@ -46,11 +47,11 @@ class RegistrationServiceImpl(
      * @param userRegistrationForm user information passed via user registration form.
      * @return newly created user entity
      */
-    override fun registerNewUser(userRegistrationForm: UserRegistrationForm): User {
+    override fun registerNewUser(userRegistrationForm: UserRegistrationForm): Optional<UserDto> {
         if (!userRegistrationForm.validate())
             throw IllegalStateException("Invalid user registration form")
 
-        val userCheck: User = this.userRepository.findByEmail(userRegistrationForm.email)
+        val userCheck = this.userRepository.findByEmail(userRegistrationForm.email)
         if (userCheck != null)
             throw EmailExistsException("An account already exists for the username: ${userRegistrationForm.email}")
 
@@ -66,9 +67,9 @@ class RegistrationServiceImpl(
         )
 
         user.verificationToken = this.generateVerificationToken(user)
-
         this.sendVerificationEmail(user)
-        return this.userRepository.save(user)
+
+        return Optional.of(UserDto(this.userRepository.save(user)))
     }
 
     /**
@@ -77,11 +78,15 @@ class RegistrationServiceImpl(
      * @param token contents of verification token used to confirm newly registered user.
      * @return newly confirmed registered user entity.
      */
-    override fun confirmNewUser(token: String): User {
+    override fun confirmNewUser(token: String): Optional<UserDto> {
         val user = this.verificationTokenRepository.findByToken(token).user
-        user.enabled = true
-        this.userRepository.save(user)
-        return user
+        return if (user == null)
+            Optional.empty()
+        else {
+            user.enabled = true
+            this.userRepository.save(user)
+            Optional.of(UserDto(user))
+        }
     }
 
     /**
