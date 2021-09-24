@@ -1,7 +1,8 @@
 package io.jonathanlee.splitapi.service.auth
 
+import io.jonathanlee.splitapi.dto.auth.UserDto
 import io.jonathanlee.splitapi.form.auth.UserRegistrationForm
-import io.jonathanlee.splitapi.model.auth.User
+import java.util.*
 
 /**
  * Registration service used to manage registration of users.
@@ -16,7 +17,7 @@ interface RegistrationService {
      * @param userRegistrationForm information provided in user registration form.
      * @return user obtained according to information provided in user registration form.
      */
-    fun registerNewUser(userRegistrationForm: UserRegistrationForm): User
+    fun registerNewUser(userRegistrationForm: UserRegistrationForm): Optional<UserDto>
 
     /**
      * Used to confirm new users according to verification token contents.
@@ -24,6 +25,6 @@ interface RegistrationService {
      * @param token contents of verification token.
      * @return user confirmed according to contents of verification token.
      */
-    fun confirmNewUser(token: String): User
+    fun confirmNewUser(token: String): Optional<UserDto>
 
 }
