@@ -2,6 +2,7 @@ package io.jonathanlee.splitapi.repository.auth
 
 import io.jonathanlee.splitapi.model.auth.PasswordResetToken
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.lang.Nullable
 
 /**
  * Repository interface used to interact with password reset token entities.
@@ -24,6 +25,7 @@ interface PasswordResetTokenRepository : JpaRepository<PasswordResetToken, Long>
      * @param userId ID of user entity to which the password reset token entity is attached.
      * @return password reset token entity attached to user entity.
      */
+    @Nullable
     fun findByUserId(userId: Long): PasswordResetToken
 
 }

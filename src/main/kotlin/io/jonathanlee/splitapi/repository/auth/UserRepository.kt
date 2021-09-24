@@ -26,6 +26,7 @@ interface UserRepository : JpaRepository<User, Long> {
      * @param userId ID of user entity to be returned.
      * @return user entity obtained by user ID.
      */
+    @Nullable
     fun findByUserId(userId: String): User
 
 }
