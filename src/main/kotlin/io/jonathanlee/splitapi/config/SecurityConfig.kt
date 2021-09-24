@@ -16,6 +16,8 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
         http
             ?.authorizeRequests()
             ?.antMatchers("/register/**")?.permitAll()
+            ?.antMatchers("/login/**")?.permitAll()
+            ?.antMatchers("/user/**")?.permitAll()
             ?.anyRequest()?.authenticated()
             ?.and()
             ?.formLogin()

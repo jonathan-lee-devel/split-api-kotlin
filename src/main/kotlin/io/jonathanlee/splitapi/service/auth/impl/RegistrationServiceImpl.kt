@@ -39,6 +39,7 @@ class RegistrationServiceImpl(
 
         val user = User(
             0L,
+            UUID.randomUUID().toString(),
             userRegistrationForm.email,
             this.passwordEncoder.encode(userRegistrationForm.password),
             false,
