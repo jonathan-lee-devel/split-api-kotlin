@@ -5,6 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 import javax.persistence.*
 
+/**
+ * Entity used to represent a user.
+ *
+ * @author Jonathan Lee <jonathan.lee.devel@gmail.com>
+ */
 @Entity
 data class User(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long,

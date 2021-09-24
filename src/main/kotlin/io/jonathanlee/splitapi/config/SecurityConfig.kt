@@ -8,10 +8,18 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 
+/**
+ * Basic configuration file for Application Security.
+ *
+ * @author Jonathan Lee <jonathan.lee.devel@gmail.com>
+ */
 @EnableWebSecurity
 @Configuration
 class SecurityConfig : WebSecurityConfigurerAdapter() {
 
+    /**
+     * Primary configuration method for application security.
+     */
     override fun configure(http: HttpSecurity?) {
         http
             ?.authorizeRequests()
@@ -25,6 +33,10 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             ?.csrf()?.disable()
     }
 
+    /**
+     * Password encoder bean configured as BCrypt password encoder.
+     * @return BCrypt password encoder
+     */
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
