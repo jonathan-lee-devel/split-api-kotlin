@@ -6,16 +6,30 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.JavaMailSenderImpl
 
+/**
+ * Basic configuration file for Java Mail Sender.
+ *
+ * @author Jonathan Lee <jonathan.lee.devel@gmail.com>
+ */
 @Configuration
 class MailConfig {
 
+    /**
+     * Mail username obtained from environment variable.
+     */
     @Value("#{environment.MAIL_USERNAME}")
     private lateinit var mailUsername: String
 
+    /**
+     * Mail password obtained from environment variable.
+     */
     @Value("#{environment.MAIL_PASSWORD}")
     private lateinit var mailPassword: String
 
 
+    /**
+     * Primary Java Mail sender bean configured for gmail SMTP according to environment variables.
+     */
     @Bean
     fun javaMailSender(): JavaMailSender {
         val mailSender = JavaMailSenderImpl()

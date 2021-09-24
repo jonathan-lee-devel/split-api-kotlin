@@ -14,6 +14,11 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
 
+/**
+ * Implementation of user registration service used to manage user registrations.
+ *
+ * @author Jonathan Lee <jonathan.lee.devel@gmail.com>
+ */
 @Service
 class RegistrationServiceImpl(
     private val userRepository: UserRepository,
@@ -22,13 +27,25 @@ class RegistrationServiceImpl(
     private val mailSender: JavaMailSender
 ) : RegistrationService {
 
+    /**
+     * Mail username obtained from environment variable.
+     */
     @Value("#{environment.MAIL_USERNAME}")
     private lateinit var mailUsername: String
 
+    /**
+     * Object used to contain registration service constant values.
+     */
     object RegistrationServiceConstants {
         const val TOKEN_EXPIRATION_TIME_MINUTES = 15
     }
 
+    /**
+     * Implementation of method used to register new users according to user information passed via user registration form.
+     *
+     * @param userRegistrationForm user information passed via user registration form.
+     * @return newly created user entity
+     */
     override fun registerNewUser(userRegistrationForm: UserRegistrationForm): User {
         if (!userRegistrationForm.validate())
             throw IllegalStateException("Invalid user registration form")
@@ -54,6 +71,12 @@ class RegistrationServiceImpl(
         return this.userRepository.save(user)
     }
 
+    /**
+     * Implementation of method used to confirm new users according to verification token contents.
+     *
+     * @param token contents of verification token used to confirm newly registered user.
+     * @return newly confirmed registered user entity.
+     */
     override fun confirmNewUser(token: String): User {
         val user = this.verificationTokenRepository.findByToken(token).user
         user.enabled = true
@@ -61,6 +84,12 @@ class RegistrationServiceImpl(
         return user
     }
 
+    /**
+     * Helper method used to generate verification token used to confirm newly registered user.
+     *
+     * @param user for which verification token is to be generated.
+     * @return verification token generated to be used to confirm newly registered user.
+     */
     private fun generateVerificationToken(user: User): VerificationToken {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = Date().time
@@ -75,6 +104,11 @@ class RegistrationServiceImpl(
         )
     }
 
+    /**
+     * Helper method used to send verification email to registered user email address.
+     *
+     * @param user which is to be emailed with verification URL.
+     */
     private fun sendVerificationEmail(user: User) {
         val confirmationUrl = "http://localhost:8080/register/confirm?token=${user.verificationToken?.token}"
 
