@@ -57,7 +57,7 @@ class UserController(
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/id/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    fun getByUserId(@PathVariable userId: String): ResponseEntity<UserDto> {
+    fun getUserByUserId(@PathVariable userId: String): ResponseEntity<UserDto> {
         val user = this.userService.getUserByUserId(userId)
         return if (user.isEmpty)
             ResponseEntity.notFound().build()
