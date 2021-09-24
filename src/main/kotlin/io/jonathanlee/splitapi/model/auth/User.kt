@@ -29,5 +29,5 @@ data class User(
         fetch = FetchType.EAGER,
         mappedBy = "user",
         cascade = [CascadeType.ALL]
-    ) val passwordResetToken: PasswordResetToken?
+    ) var passwordResetToken: PasswordResetToken?
 )

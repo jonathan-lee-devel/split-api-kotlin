@@ -29,13 +29,13 @@ class RegistrationController(
      */
     @PostMapping
     fun register(@Valid @RequestBody userRegistrationForm: UserRegistrationForm): ResponseEntity<UserDto> {
-        return ResponseEntity.ok(
-            this.userService.getUserByUserId(
-                this.registrationService.registerNewUser(
-                    userRegistrationForm
-                ).userId
-            )
-        )
+        val user =
+            this.userService.getUserByUserId(this.registrationService.registerNewUser(userRegistrationForm).userId)
+
+        return if (user.isEmpty)
+            ResponseEntity.notFound().build()
+        else
+            ResponseEntity.ok(user.get())
     }
 
     /**
@@ -46,7 +46,12 @@ class RegistrationController(
      */
     @GetMapping("/confirm")
     fun confirm(@RequestParam token: String): ResponseEntity<UserDto> {
-        return ResponseEntity.ok(this.userService.getUserByUserId(this.registrationService.confirmNewUser(token).userId))
+        val user = this.userService.getUserByUserId(this.registrationService.confirmNewUser(token).userId)
+
+        return if (user.isEmpty)
+            ResponseEntity.notFound().build()
+        else
+            ResponseEntity.ok(user.get())
     }
 
 }

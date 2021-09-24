@@ -14,7 +14,7 @@ data class PasswordResetToken(
     val token: String,
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id") val user: User,
-    val expiryDate: Date
+    var expiryDate: Date
 ) {
     constructor(token: String, user: User) : this(0L, token, user, Date())
 }
