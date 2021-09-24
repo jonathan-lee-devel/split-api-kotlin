@@ -87,7 +87,7 @@ class UserServiceImpl(
     @Transactional
     override fun resetPasswordByEmail(email: String): Optional<UserDto> {
         var user = this.userRepository.findByEmail(email)
-        return if (user == null) {
+        return if (user == null || !user.enabled) {
             Optional.empty()
         } else {
             val existingToken = this.passwordResetTokenRepository.findByUserId(user.id)
@@ -115,7 +115,7 @@ class UserServiceImpl(
      */
     override fun confirmPasswordReset(tokenContents: String, passwordResetForm: PasswordResetForm): Optional<UserDto> {
         val token = this.passwordResetTokenRepository.findByToken(tokenContents)
-        return if (token.expiryDate.after(Date())) {
+        return if (token.expiryDate.after(Date()) && token.user.enabled) {
             token.user.password = this.passwordEncoder.encode(passwordResetForm.password)
             this.userRepository.save(token.user)
             this.passwordResetTokenRepository.delete(token) // Delete the token after use
