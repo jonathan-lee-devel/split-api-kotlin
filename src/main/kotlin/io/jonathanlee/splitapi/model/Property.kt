@@ -10,7 +10,7 @@ import javax.persistence.*
 data class Property(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long,
     @JsonProperty("property_id") @Column(name = "property_id", unique = true) val propertyId: String,
-    @Column(name = "created_at") val createdAt: Date,
+    @JsonProperty("created_at") @Column(name = "created_at") val createdAt: Date,
     var name: String,
     var address: String,
     @JsonIgnore @ManyToOne(

@@ -1,4 +1,4 @@
-package io.jonathanlee.splitapi.controller.auth
+package io.jonathanlee.splitapi.controller
 
 import io.jonathanlee.splitapi.dto.PropertyDto
 import io.jonathanlee.splitapi.form.PropertyForm
@@ -30,7 +30,7 @@ class PropertyController(
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     fun createProperty(@RequestBody propertyForm: PropertyForm): ResponseEntity<PropertyDto> {
         val property = this.propertyService.createProperty(propertyForm)
         return if (property.isEmpty)
@@ -40,7 +40,7 @@ class PropertyController(
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun updateProperty(@RequestBody propertyDto: PropertyDto): ResponseEntity<PropertyDto> {
         val property = this.propertyService.updateProperty(propertyDto)
         return if (property.isEmpty)
@@ -50,7 +50,7 @@ class PropertyController(
     }
 
     @DeleteMapping("/id/{propertyId}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deletePropertyByPropertyId(@PathVariable propertyId: String): ResponseEntity<PropertyDto> {
         val property = this.propertyService.deletePropertyByPropertyId(propertyId)
         return if (property.isEmpty)
