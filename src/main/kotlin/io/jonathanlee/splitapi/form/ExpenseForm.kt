@@ -5,6 +5,11 @@ import io.jonathanlee.splitapi.model.Expense
 import java.math.BigDecimal
 import java.util.*
 
+/**
+ * Form filled in with user-entered data representing an expense.
+ *
+ * @author Jonathan Lee <jonathan.lee.devel@gmail.com>
+ */
 class ExpenseForm(
     val amount: BigDecimal,
     val frequency: Expense.ExpenseFrequency,

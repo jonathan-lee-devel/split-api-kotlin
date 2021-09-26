@@ -9,16 +9,32 @@ import io.jonathanlee.splitapi.service.PropertyService
 import org.springframework.stereotype.Service
 import java.util.*
 
+/**
+ * Implementation of property service used to manage properties.
+ *
+ * @author Jonathan Lee <jonathan.lee.devel@gmail.com>
+ */
 @Service
 class PropertyServiceImpl(
     private val propertyRepository: PropertyRepository,
     private val userRepository: UserRepository
 ) : PropertyService {
 
+    /**
+     * Method used to obtain available properties.
+     *
+     * @return property data contained in PropertyDto.
+     */
     override fun getProperties(): Collection<PropertyDto> {
         return this.propertyRepository.findAll().map { PropertyDto(it) }
     }
 
+    /**
+     * Method used to obtain a specific property by property ID.
+     *
+     * @param propertyId ID of specific property to be obtained.
+     * @return property data contained in a PropertyDto.
+     */
     override fun getPropertyByPropertyId(propertyId: String): Optional<PropertyDto> {
         val property = this.propertyRepository.findByPropertyId(propertyId)
         return if (property == null)
@@ -27,6 +43,12 @@ class PropertyServiceImpl(
             Optional.of(PropertyDto(property))
     }
 
+    /**
+     * Method used to create a property.
+     *
+     * @param propertyForm form data used to create a property.
+     * @return property data contained in a PropertyDto.
+     */
     override fun createProperty(propertyForm: PropertyForm): Optional<PropertyDto> {
         val user = this.userRepository.findByUserId(propertyForm.userId)
         if (user == null)
@@ -45,6 +67,12 @@ class PropertyServiceImpl(
         return Optional.of(PropertyDto(property))
     }
 
+    /**
+     * Method used to update a property.
+     *
+     * @param propertyDto property data for updated property.
+     * @return property data contained in a PropertyDto.
+     */
     override fun updateProperty(propertyDto: PropertyDto): Optional<PropertyDto> {
         val property = this.propertyRepository.findByPropertyId(propertyDto.propertyId)
         if (property == null)
@@ -56,6 +84,12 @@ class PropertyServiceImpl(
         return Optional.of(PropertyDto(this.propertyRepository.save(property)))
     }
 
+    /**
+     * Method used to delete a property.
+     *
+     * @param propertyId ID of property to be deleted.
+     * @return property data contained in a PropertyDto.
+     */
     override fun deletePropertyByPropertyId(propertyId: String): Optional<PropertyDto> {
         val property = this.propertyRepository.findByPropertyId(propertyId)
         if (property == null)

@@ -6,6 +6,11 @@ import java.math.BigDecimal
 import java.util.*
 import javax.persistence.*
 
+/**
+ * Entity used to represent an expense.
+ *
+ * @author Jonathan Lee <jonathan.lee.devel@gmail.com>
+ */
 @Entity
 data class Expense(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long,
