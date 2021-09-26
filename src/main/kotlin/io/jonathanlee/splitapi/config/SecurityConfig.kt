@@ -40,6 +40,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
 
     /**
      * Password encoder bean configured as BCrypt password encoder.
+     *
      * @return BCrypt password encoder
      */
     @Bean
