@@ -6,6 +6,11 @@ import io.jonathanlee.splitapi.model.auth.User
 import java.util.*
 import javax.persistence.*
 
+/**
+ * Entity used to represent a property.
+ *
+ * @author Jonathan Lee <jonathan.lee.devel@gmail.com>
+ */
 @Entity
 data class Property(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long,

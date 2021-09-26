@@ -5,6 +5,11 @@ import io.jonathanlee.splitapi.model.Expense
 import java.math.BigDecimal
 import java.util.*
 
+/**
+ * Data transfer object used for transporting Expense model data.
+ *
+ * @author Jonathan Lee <jonathan.lee.devel@gmail.com>
+ */
 data class ExpenseDto(
     @JsonProperty("expense_id") val expenseId: String,
     @JsonProperty("created_at") val createdAt: Date,

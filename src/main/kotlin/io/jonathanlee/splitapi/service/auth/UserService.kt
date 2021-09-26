@@ -13,6 +13,8 @@ interface UserService {
 
     /**
      * Method used to obtain available users.
+     *
+     * @return user data contained in UserDto.
      */
     fun getUsers(): Collection<UserDto>
 
