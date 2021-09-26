@@ -17,21 +17,19 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-mail")
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.5.4")
+    implementation("org.springframework.boot:spring-boot-starter-mail:2.5.4")
+    implementation("org.springframework.boot:spring-boot-starter-security:2.5.4")
+    implementation("org.springframework.boot:spring-boot-starter-web:2.5.4")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.5")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.springframework.session:spring-session-core")
-    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
+    implementation("org.springframework.session:spring-session-core:2.5.2")
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
     implementation("org.springframework.boot:spring-boot-starter-validation:2.5.4")
-    runtimeOnly("mysql:mysql-connector-java")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.security:spring-security-test")
+    runtimeOnly("mysql:mysql-connector-java:8.0.25")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.4")
+    testImplementation("org.springframework.security:spring-security-test:5.5.1")
 }
 
 tasks.withType<KotlinCompile> {
