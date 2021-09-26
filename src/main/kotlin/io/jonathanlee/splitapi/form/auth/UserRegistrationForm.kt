@@ -1,5 +1,6 @@
 package io.jonathanlee.splitapi.form.auth
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import io.jonathanlee.splitapi.form.Form
 import javax.validation.constraints.Email
 
@@ -11,7 +12,7 @@ import javax.validation.constraints.Email
 class UserRegistrationForm(
     @field:Email val email: String,
     val password: String,
-    private val confirmPassword: String
+    @JsonProperty("confirm_password") private val confirmPassword: String
 ) : Form {
 
     /**
