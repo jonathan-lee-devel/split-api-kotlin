@@ -33,7 +33,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             ?.antMatchers("/renter/**")?.permitAll()
             ?.anyRequest()?.authenticated()
             ?.and()
-            ?.formLogin()
+            ?.formLogin()?.loginPage("http://localhost:4200")?.loginProcessingUrl("/login")
             ?.and()
             ?.csrf()?.disable()
     }
@@ -41,7 +41,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
     /**
      * Password encoder bean configured as BCrypt password encoder.
      *
-     * @return BCrypt password encoder
+     * @return BCrypt password encoder.
      */
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()

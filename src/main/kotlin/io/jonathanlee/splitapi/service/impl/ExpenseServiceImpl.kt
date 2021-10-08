@@ -65,7 +65,7 @@ class ExpenseServiceImpl(
             property
         )
         this.expenseRepository.save(expense)
-
+        
         return Optional.of(ExpenseDto(expense))
     }
 
