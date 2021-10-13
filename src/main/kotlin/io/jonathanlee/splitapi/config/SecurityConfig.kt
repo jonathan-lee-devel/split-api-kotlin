@@ -31,6 +31,8 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             ?.antMatchers("/property/**")?.permitAll()
             ?.antMatchers("/expense/**")?.permitAll()
             ?.antMatchers("/renter/**")?.permitAll()
+            ?.antMatchers("/v3/api-docs/**")?.permitAll()
+            ?.antMatchers("/swagger-ui/**")?.permitAll()
             ?.anyRequest()?.authenticated()
             ?.and()
             ?.formLogin()?.loginPage("http://localhost:4200/login")?.loginProcessingUrl("/login")
