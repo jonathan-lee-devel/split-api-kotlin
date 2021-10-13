@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 
@@ -28,26 +29,15 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             ?.antMatchers("/register/**")?.permitAll()
             ?.antMatchers("/login/**")?.permitAll()
             ?.antMatchers("/user/**")?.permitAll()
-            ?.antMatchers("/property/**")?.permitAll()
-            ?.antMatchers("/expense/**")?.permitAll()
-            ?.antMatchers("/renter/**")?.permitAll()
             ?.antMatchers("/v3/api-docs/**")?.permitAll()
             ?.antMatchers("/swagger-ui/**")?.permitAll()
             ?.anyRequest()?.authenticated()
             ?.and()
-            ?.formLogin()?.loginPage("http://localhost:4200/login")?.loginProcessingUrl("/login")
-            ?.defaultSuccessUrl("http://localhost:4200/", true)
-            ?.and()
-            ?.rememberMe()?.key("remember_me")
-            ?.and()
-            ?.logout()
-            ?.invalidateHttpSession(true)
-            ?.deleteCookies("JSESSIONID", "remember-me")
-            ?.logoutSuccessUrl("http://localhost:4200/login")
+            ?.cors()?.and()
+            ?.sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             ?.and()
             ?.csrf()?.disable()
-
-        http?.cors()
+            ?.oauth2ResourceServer()?.jwt()
     }
 
     /**

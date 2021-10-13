@@ -6,6 +6,7 @@ import io.jonathanlee.splitapi.service.auth.RegistrationService
 import io.jonathanlee.splitapi.service.auth.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 /**
  * REST controller used for user registration.
@@ -26,36 +27,8 @@ class RegistrationController(
      * @param userRegistrationForm user registration form used to obtain information on newly registered user.
      * @return UserDto contained in a ResponseEntity with newly registered user's information.
      */
-//    @PostMapping
-//    fun register(@Valid @RequestBody userRegistrationForm: UserRegistrationForm): ResponseEntity<UserDto> {
-//        var user = this.registrationService.registerNewUser(userRegistrationForm)
-//        if (user.isEmpty)
-//            return ResponseEntity.badRequest().build()
-//        else {
-//            user = this.userService.getUserByUserId(user.get().userId)
-//        }
-//
-//        return if (user.isEmpty)
-//            ResponseEntity.internalServerError().build()
-//        else
-//            ResponseEntity.ok(user.get())
-//    }
-
-    /**
-     * POST request used to register a new user based on the information passed to the controller via the
-     * user registration form request body.
-     *
-     * @param userRegistrationFormData user registration form used to obtain information on newly registered user.
-     * @return UserDto contained in a ResponseEntity with newly registered user's information.
-     */
     @PostMapping
-    fun registerFormData(@RequestParam userRegistrationFormData: Map<String, String>): ResponseEntity<UserDto> {
-        val userRegistrationForm = UserRegistrationForm(
-            userRegistrationFormData["username"].toString(),
-            userRegistrationFormData["password"].toString(),
-            userRegistrationFormData["confirmPassword"].toString()
-        )
-
+    fun register(@Valid @RequestBody userRegistrationForm: UserRegistrationForm): ResponseEntity<UserDto> {
         var user = this.registrationService.registerNewUser(userRegistrationForm)
         if (user.isEmpty)
             return ResponseEntity.badRequest().build()

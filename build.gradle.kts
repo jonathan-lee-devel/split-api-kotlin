@@ -20,6 +20,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.5.5")
     implementation("org.springframework.boot:spring-boot-starter-mail:2.5.5")
     implementation("org.springframework.boot:spring-boot-starter-security:2.5.5")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework.boot:spring-boot-starter-web:2.5.5")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
