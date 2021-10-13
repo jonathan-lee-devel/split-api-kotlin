@@ -33,9 +33,19 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             ?.antMatchers("/renter/**")?.permitAll()
             ?.anyRequest()?.authenticated()
             ?.and()
-            ?.formLogin()?.loginPage("http://localhost:4200")?.loginProcessingUrl("/login")
+            ?.formLogin()?.loginPage("http://localhost:4200/login")?.loginProcessingUrl("/login")
+            ?.defaultSuccessUrl("http://localhost:4200/", true)
+            ?.and()
+            ?.rememberMe()?.key("remember_me")
+            ?.and()
+            ?.logout()
+            ?.invalidateHttpSession(true)
+            ?.deleteCookies("JSESSIONID", "remember-me")
+            ?.logoutSuccessUrl("http://localhost:4200/login")
             ?.and()
             ?.csrf()?.disable()
+
+        http?.cors()
     }
 
     /**
