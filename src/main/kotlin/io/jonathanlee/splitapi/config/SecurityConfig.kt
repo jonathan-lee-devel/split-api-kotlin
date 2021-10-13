@@ -31,6 +31,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             ?.antMatchers("/user/**")?.permitAll()
             ?.antMatchers("/v3/api-docs/**")?.permitAll()
             ?.antMatchers("/swagger-ui/**")?.permitAll()
+            ?.antMatchers("/renter/**")?.hasAuthority("SCOPE_email")
             ?.anyRequest()?.authenticated()
             ?.and()
             ?.cors()?.and()

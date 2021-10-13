@@ -15,6 +15,7 @@ class AuthorizationInterceptor : HandlerInterceptor {
         if (principal != null && principal !is String) {
             val jwt = principal as Jwt
             println(jwt.claims)
+            println(jwt.claims["pages"])
         }
 
         return true
