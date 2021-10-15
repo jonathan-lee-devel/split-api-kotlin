@@ -16,7 +16,8 @@ class RenterAuthorizationInterceptor : HandlerInterceptor {
             val jwt = principal as Jwt
         }
 
-        return true
+        val roles = request.getAttribute(AuthorizationInterceptor.rolesAttribute) as Collection<*>
+        return roles.contains("USER") || roles.contains("ADMIN")
     }
 
 }
