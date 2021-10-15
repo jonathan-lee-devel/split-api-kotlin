@@ -26,6 +26,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity?) {
         http
             ?.authorizeRequests()
+            ?.antMatchers("/**")?.permitAll()
             ?.antMatchers("/register/**")?.permitAll()
             ?.antMatchers("/login/**")?.permitAll()
             ?.antMatchers("/user/**")?.permitAll()
