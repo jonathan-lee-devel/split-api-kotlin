@@ -22,8 +22,6 @@ class AuthorizationInterceptor(
             map = map["split-api"] as Map<*, *>?
             val roles = map["roles"] as List<*>
 
-            for (role in roles) println(role)
-
             request.setAttribute(rolesAttribute, roles)
         }
 

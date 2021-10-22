@@ -1,3 +1,7 @@
+auth:
+  keycloak:
+    admin:
+      clientSecret: 32250571-f3a7-416a-88d3-47f7a7ef65ff
 spring:
   security:
     oauth2:

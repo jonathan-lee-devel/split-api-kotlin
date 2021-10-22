@@ -1,11 +1,16 @@
 package io.jonathanlee.splitapi.controller.auth
 
-import io.jonathanlee.splitapi.dto.auth.UserDto
+import io.jonathanlee.splitapi.dto.auth.KeycloakUserRegistration
+import io.jonathanlee.splitapi.dto.auth.KeycloakUserRegistrationCredentials
 import io.jonathanlee.splitapi.form.auth.UserRegistrationForm
-import io.jonathanlee.splitapi.service.auth.RegistrationService
-import io.jonathanlee.splitapi.service.auth.UserService
+import io.jonathanlee.splitapi.service.auth.KeycloakAdminService
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientResponseException
+import reactor.core.publisher.Mono
 import javax.validation.Valid
 
 /**
@@ -16,50 +21,62 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/register")
 class RegistrationController(
-    private val registrationService: RegistrationService,
-    private val userService: UserService
+    private val keycloakAdminService: KeycloakAdminService,
+    private val webClient: WebClient
 ) {
 
     /**
      * POST request used to register a new user based on the information passed to the controller via the
      * user registration form request body.
      *
-     * @param userRegistrationForm user registration form used to obtain information on newly registered user.
+     * @param userRegistration user registration form used to obtain information on newly registered user.
      * @return UserDto contained in a ResponseEntity with newly registered user's information.
      */
     @PostMapping
-    fun register(@Valid @RequestBody userRegistrationForm: UserRegistrationForm): ResponseEntity<UserDto> {
-        var user = this.registrationService.registerNewUser(userRegistrationForm)
-        if (user.isEmpty)
-            return ResponseEntity.badRequest().build()
-        else {
-            user = this.userService.getUserByUserId(user.get().userId)
+    @ResponseStatus(HttpStatus.CREATED)
+    fun register(@Valid @RequestBody userRegistration: UserRegistrationForm): ResponseEntity<Void> {
+
+        if (!userRegistration.validate()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build()
         }
 
-        return if (user.isEmpty)
-            ResponseEntity.internalServerError().build()
-        else
-            ResponseEntity.ok(user.get())
-    }
+        val keycloakUserRegistration = KeycloakUserRegistration(
+            userRegistration.firstName,
+            userRegistration.lastName,
+            userRegistration.email,
+            enabled = true,
+            emailVerified = false,
+            userRegistration.username,
+            listOf(KeycloakUserRegistrationCredentials("password", userRegistration.password, false))
+        )
 
-    /**
-     * GET request used to confirm the registration of newly registered user via the token request parameter.
-     *
-     * @param token user registration verification token used to confirm registration of new user
-     * @return UserDto contained in a ResponseEntity with newly confirmed registered user's information
-     */
-    @GetMapping("/confirm")
-    fun confirm(@RequestParam token: String): ResponseEntity<UserDto> {
-        var user = this.registrationService.confirmNewUser(token)
-        if (user.isEmpty)
-            return ResponseEntity.notFound().build()
-        else
-            user = this.userService.getUserByUserId(user.get().userId)
+        val response: Mono<ResponseEntity<Void>> = this.webClient.post()
+            .uri("/auth/admin/realms/split/users")
+            .header(
+                HttpHeaders.AUTHORIZATION,
+                "Bearer ${this.keycloakAdminService.obtainAccessToken()}"
+            )
+            .body(Mono.just(keycloakUserRegistration), KeycloakUserRegistration::class.java)
+            .retrieve()
+            .toBodilessEntity()
+        try {
+            response.block()
+        } catch (ex: WebClientResponseException) {
+            println("Exception: $ex")
+            return when (ex.statusCode) {
+                HttpStatus.UNAUTHORIZED -> {
+                    ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+                }
+                HttpStatus.CONFLICT -> {
+                    ResponseEntity.status(HttpStatus.CONFLICT).build()
+                }
+                else -> {
+                    ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+                }
+            }
+        }
 
-        return if (user.isEmpty)
-            ResponseEntity.notFound().build()
-        else
-            ResponseEntity.ok(user.get())
+        return ResponseEntity.status(HttpStatus.CREATED).build()
     }
 
 }
