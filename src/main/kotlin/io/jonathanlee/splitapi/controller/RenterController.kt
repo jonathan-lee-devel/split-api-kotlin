@@ -53,8 +53,11 @@ class RenterController(
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createRenter(@RequestBody renterForm: RenterForm): ResponseEntity<RenterDto> {
-        val renter = this.renterService.createRenter(renterForm)
+    fun createRenter(
+        username: String,
+        @RequestBody renterForm: RenterForm
+    ): ResponseEntity<RenterDto> {
+        val renter = this.renterService.createRenter(username, renterForm)
         return if (renter.isEmpty)
             ResponseEntity.badRequest().build()
         else

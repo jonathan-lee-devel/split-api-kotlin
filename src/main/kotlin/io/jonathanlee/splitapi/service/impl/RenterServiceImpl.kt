@@ -4,9 +4,9 @@ import io.jonathanlee.splitapi.dto.RenterDto
 import io.jonathanlee.splitapi.form.RenterForm
 import io.jonathanlee.splitapi.model.Renter
 import io.jonathanlee.splitapi.repository.RenterRepository
-import io.jonathanlee.splitapi.repository.auth.UserRepository
 import io.jonathanlee.splitapi.service.RenterService
 import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.RequestAttribute
 import java.util.*
 
 /**
@@ -16,8 +16,7 @@ import java.util.*
  */
 @Service
 class RenterServiceImpl(
-    private val renterRepository: RenterRepository,
-    private val userRepository: UserRepository
+    private val renterRepository: RenterRepository
 ) : RenterService {
 
     /**
@@ -49,17 +48,13 @@ class RenterServiceImpl(
      * @param renterForm form data used to create a renter.
      * @return renter data contained in a RenterDto.
      */
-    override fun createRenter(renterForm: RenterForm): Optional<RenterDto> {
-        val user = this.userRepository.findByUserId(renterForm.userId)
-        if (user == null)
-            return Optional.empty()
-
+    override fun createRenter(@RequestAttribute username: String, renterForm: RenterForm): Optional<RenterDto> {
         val renter = Renter(
             0L,
             UUID.randomUUID().toString(),
             Date(),
             renterForm.name,
-            user
+            username
         )
         this.renterRepository.save(renter)
 

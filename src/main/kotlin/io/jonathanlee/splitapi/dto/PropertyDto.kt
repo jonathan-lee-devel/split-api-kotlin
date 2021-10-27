@@ -21,6 +21,6 @@ data class PropertyDto(
         property.createdAt,
         property.name,
         property.address,
-        property.user.userId
+        property.username
     )
 }

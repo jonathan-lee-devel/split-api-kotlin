@@ -32,7 +32,7 @@ interface RenterService {
      * @param renterForm form data used to create a renter.
      * @return renter data contained in a RenterDto.
      */
-    fun createRenter(renterForm: RenterForm): Optional<RenterDto>
+    fun createRenter(username: String, renterForm: RenterForm): Optional<RenterDto>
 
     /**
      * Method used to update a renter.

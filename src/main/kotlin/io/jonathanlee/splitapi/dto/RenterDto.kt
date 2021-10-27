@@ -19,6 +19,6 @@ data class RenterDto(
         renter.renterId,
         renter.createdAt,
         renter.name,
-        renter.user.userId
+        renter.username
     )
 }

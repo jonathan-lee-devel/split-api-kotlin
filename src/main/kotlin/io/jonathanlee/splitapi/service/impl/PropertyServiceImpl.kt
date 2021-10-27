@@ -3,9 +3,7 @@ package io.jonathanlee.splitapi.service.impl
 import io.jonathanlee.splitapi.dto.PropertyDto
 import io.jonathanlee.splitapi.form.PropertyForm
 import io.jonathanlee.splitapi.model.Property
-import io.jonathanlee.splitapi.model.auth.User
 import io.jonathanlee.splitapi.repository.PropertyRepository
-import io.jonathanlee.splitapi.repository.auth.UserRepository
 import io.jonathanlee.splitapi.service.PropertyService
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.RequestAttribute
@@ -19,7 +17,6 @@ import java.util.*
 @Service
 class PropertyServiceImpl(
     private val propertyRepository: PropertyRepository,
-    private val userRepository: UserRepository
 ) : PropertyService {
 
     /**
@@ -52,18 +49,13 @@ class PropertyServiceImpl(
      * @return property data contained in a PropertyDto.
      */
     override fun createProperty(@RequestAttribute username: String, propertyForm: PropertyForm): Optional<PropertyDto> {
-//        val user = this.userRepository.findByEmail(username)
-        val user = User(0L, UUID.randomUUID().toString(), username, "password", true, Date(), null, null)
-        if (user == null)
-            return Optional.empty()
-
         val property = Property(
             0L,
             UUID.randomUUID().toString(),
             Date(),
             propertyForm.name,
             propertyForm.address,
-            user
+            username
         )
         this.propertyRepository.save(property)
 
