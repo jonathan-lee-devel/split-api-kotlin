@@ -18,7 +18,7 @@ class CorsConfig {
             "Origin",
             "Access-Control-Allow-Origin",
             "Content-Type",
-            "Accept",
+            "Accepts",
             "Authorization",
             "Origin, Accept",
             "X-Requested-With",
