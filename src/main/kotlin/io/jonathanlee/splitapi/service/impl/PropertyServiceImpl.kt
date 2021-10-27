@@ -3,10 +3,12 @@ package io.jonathanlee.splitapi.service.impl
 import io.jonathanlee.splitapi.dto.PropertyDto
 import io.jonathanlee.splitapi.form.PropertyForm
 import io.jonathanlee.splitapi.model.Property
+import io.jonathanlee.splitapi.model.auth.User
 import io.jonathanlee.splitapi.repository.PropertyRepository
 import io.jonathanlee.splitapi.repository.auth.UserRepository
 import io.jonathanlee.splitapi.service.PropertyService
 import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.RequestAttribute
 import java.util.*
 
 /**
@@ -49,8 +51,9 @@ class PropertyServiceImpl(
      * @param propertyForm form data used to create a property.
      * @return property data contained in a PropertyDto.
      */
-    override fun createProperty(propertyForm: PropertyForm): Optional<PropertyDto> {
-        val user = this.userRepository.findByUserId(propertyForm.userId)
+    override fun createProperty(@RequestAttribute username: String, propertyForm: PropertyForm): Optional<PropertyDto> {
+//        val user = this.userRepository.findByEmail(username)
+        val user = User(0L, UUID.randomUUID().toString(), username, "password", true, Date(), null, null)
         if (user == null)
             return Optional.empty()
 

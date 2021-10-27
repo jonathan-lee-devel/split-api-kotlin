@@ -2,6 +2,7 @@ package io.jonathanlee.splitapi.controller
 
 import io.jonathanlee.splitapi.dto.PropertyDto
 import io.jonathanlee.splitapi.form.PropertyForm
+import io.jonathanlee.splitapi.interceptor.auth.AuthorizationInterceptor
 import io.jonathanlee.splitapi.service.PropertyService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -53,8 +54,11 @@ class PropertyController(
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createProperty(@RequestBody propertyForm: PropertyForm): ResponseEntity<PropertyDto> {
-        val property = this.propertyService.createProperty(propertyForm)
+    fun createProperty(
+        @RequestAttribute(AuthorizationInterceptor.usernameAttribute) username: String,
+        @RequestBody propertyForm: PropertyForm
+    ): ResponseEntity<PropertyDto> {
+        val property = this.propertyService.createProperty(username, propertyForm)
         return if (property.isEmpty)
             ResponseEntity.badRequest().build()
         else

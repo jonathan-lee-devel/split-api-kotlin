@@ -32,7 +32,7 @@ interface PropertyService {
      * @param propertyForm form data used to create a property.
      * @return property data contained in a PropertyDto.
      */
-    fun createProperty(propertyForm: PropertyForm): Optional<PropertyDto>
+    fun createProperty(username: String, propertyForm: PropertyForm): Optional<PropertyDto>
 
     /**
      * Method used to update a property.
