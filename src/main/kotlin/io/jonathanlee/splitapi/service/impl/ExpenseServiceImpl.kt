@@ -1,11 +1,13 @@
 package io.jonathanlee.splitapi.service.impl
 
 import io.jonathanlee.splitapi.dto.ExpenseDto
+import io.jonathanlee.splitapi.error.SplitApiException
 import io.jonathanlee.splitapi.form.ExpenseForm
 import io.jonathanlee.splitapi.model.Expense
 import io.jonathanlee.splitapi.repository.ExpenseRepository
 import io.jonathanlee.splitapi.repository.PropertyRepository
 import io.jonathanlee.splitapi.service.ExpenseService
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -52,7 +54,7 @@ class ExpenseServiceImpl(
     override fun createExpense(expenseForm: ExpenseForm): Optional<ExpenseDto> {
         val property = this.propertyRepository.findByPropertyId(expenseForm.propertyId)
         if (property == null)
-            return Optional.empty()
+            throw SplitApiException(HttpStatus.BAD_REQUEST, "No property attached to this expense.")
 
         val expense = Expense(
             0L,
@@ -65,7 +67,7 @@ class ExpenseServiceImpl(
             property
         )
         this.expenseRepository.save(expense)
-        
+
         return Optional.of(ExpenseDto(expense))
     }
 
