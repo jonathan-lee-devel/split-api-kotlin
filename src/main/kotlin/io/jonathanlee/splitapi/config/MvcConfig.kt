@@ -17,7 +17,7 @@ class MvcConfig(
 ) : WebMvcConfigurer {
 
     override fun addInterceptors(registry: InterceptorRegistry) {
-        registry.addInterceptor(authorizationInterceptor)
+        registry.addInterceptor(authorizationInterceptor).excludePathPatterns("/register/**")
         registry.addInterceptor(expenseAuthorizationInterceptor).addPathPatterns("/expense/**")
         registry.addInterceptor(propertyAuthorizationInterceptor).addPathPatterns("/property/**")
         registry.addInterceptor(renterAuthorizationInterceptor).addPathPatterns("/renter/**")
