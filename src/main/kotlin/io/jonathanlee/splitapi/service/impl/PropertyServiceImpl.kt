@@ -1,10 +1,12 @@
 package io.jonathanlee.splitapi.service.impl
 
 import io.jonathanlee.splitapi.dto.PropertyDto
+import io.jonathanlee.splitapi.error.SplitApiException
 import io.jonathanlee.splitapi.form.PropertyForm
 import io.jonathanlee.splitapi.model.Property
 import io.jonathanlee.splitapi.repository.PropertyRepository
 import io.jonathanlee.splitapi.service.PropertyService
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.RequestAttribute
 import java.util.*
@@ -36,10 +38,10 @@ class PropertyServiceImpl(
      */
     override fun getPropertyByPropertyId(propertyId: String): Optional<PropertyDto> {
         val property = this.propertyRepository.findByPropertyId(propertyId)
-        return if (property == null)
-            Optional.empty()
+        if (property == null)
+            throw SplitApiException(HttpStatus.NOT_FOUND, PROPERTY_NOT_FOUND_MESSAGE)
         else
-            Optional.of(PropertyDto(property))
+            return Optional.of(PropertyDto(property))
     }
 
     /**
@@ -71,7 +73,7 @@ class PropertyServiceImpl(
     override fun updateProperty(propertyDto: PropertyDto): Optional<PropertyDto> {
         val property = this.propertyRepository.findByPropertyId(propertyDto.propertyId)
         if (property == null)
-            return Optional.empty()
+            throw SplitApiException(HttpStatus.NOT_FOUND, PROPERTY_NOT_FOUND_MESSAGE)
 
         property.name = propertyDto.name
         property.address = propertyDto.address
@@ -88,11 +90,15 @@ class PropertyServiceImpl(
     override fun deletePropertyByPropertyId(propertyId: String): Optional<PropertyDto> {
         val property = this.propertyRepository.findByPropertyId(propertyId)
         if (property == null)
-            return Optional.empty()
+            throw SplitApiException(HttpStatus.NOT_FOUND, PROPERTY_NOT_FOUND_MESSAGE)
 
         this.propertyRepository.delete(property)
 
         return Optional.of(PropertyDto(property))
+    }
+
+    companion object {
+        const val PROPERTY_NOT_FOUND_MESSAGE = "No property found for given property ID"
     }
 
 }

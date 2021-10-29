@@ -39,10 +39,10 @@ class ExpenseServiceImpl(
      */
     override fun getExpenseByExpenseId(expenseId: String): Optional<ExpenseDto> {
         val expense = this.expenseRepository.findByExpenseId(expenseId)
-        return if (expense == null)
-            Optional.empty()
+        if (expense == null)
+            throw SplitApiException(HttpStatus.NOT_FOUND, EXPENSE_NOT_FOUND_MESSAGE)
         else
-            Optional.of(ExpenseDto(expense))
+            return Optional.of(ExpenseDto(expense))
     }
 
     /**
@@ -54,7 +54,7 @@ class ExpenseServiceImpl(
     override fun createExpense(expenseForm: ExpenseForm): Optional<ExpenseDto> {
         val property = this.propertyRepository.findByPropertyId(expenseForm.propertyId)
         if (property == null)
-            throw SplitApiException(HttpStatus.BAD_REQUEST, "No property attached to this expense.")
+            throw SplitApiException(HttpStatus.BAD_REQUEST, PropertyServiceImpl.PROPERTY_NOT_FOUND_MESSAGE)
 
         val expense = Expense(
             0L,
@@ -80,7 +80,7 @@ class ExpenseServiceImpl(
     override fun updateExpense(expenseDto: ExpenseDto): Optional<ExpenseDto> {
         val expense = this.expenseRepository.findByExpenseId(expenseDto.expenseId)
         if (expense == null)
-            return Optional.empty()
+            throw SplitApiException(HttpStatus.NOT_FOUND, EXPENSE_NOT_FOUND_MESSAGE)
 
         expense.amount = expenseDto.amount
         expense.frequency = expenseDto.frequency
@@ -99,11 +99,15 @@ class ExpenseServiceImpl(
     override fun deleteExpenseByExpenseId(expenseId: String): Optional<ExpenseDto> {
         val expense = this.expenseRepository.findByExpenseId(expenseId)
         if (expense == null)
-            return Optional.empty()
+            throw SplitApiException(HttpStatus.NOT_FOUND, EXPENSE_NOT_FOUND_MESSAGE)
 
         this.expenseRepository.delete(expense)
 
         return Optional.of(ExpenseDto(expense))
+    }
+
+    companion object {
+        const val EXPENSE_NOT_FOUND_MESSAGE = "No expense found for given expense ID"
     }
 
 }
